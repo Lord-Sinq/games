@@ -60,6 +60,8 @@ public class TicTacToe implements ActionListener {
         title_panel.add(textfield);
         frame.add(title_panel, BorderLayout.NORTH);
         frame.add(button_panel);
+        // center the frame on the screen
+        frame.setLocationRelativeTo(null);
         // after the frame has loaded and both panels are loaded the firstTurn function is run
         firstTurn();
 
