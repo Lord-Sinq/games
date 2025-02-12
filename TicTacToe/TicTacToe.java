@@ -32,8 +32,8 @@ public class TicTacToe implements ActionListener {
         frame.setVisible(true);
 
         // sets the colors for the frame plus the title
-        textfield.setBackground(new Color(25, 25, 25));
-        textfield.setForeground(new Color(25, 45, 150));
+        textfield.setBackground(new Color(120, 6, 116));
+        textfield.setForeground(new Color(4,190, 196));
         textfield.setFont(new Font("Aris", Font.BOLD, 75));
         textfield.setHorizontalAlignment(JLabel.CENTER);
         textfield.setText("TicTacToe");
@@ -84,7 +84,7 @@ public class TicTacToe implements ActionListener {
                 } else {
                     // colors the O then switches to other player
                     if (buttons[i].getText() == "") {
-                        buttons[i].setForeground(new Color(0, 255, 0));
+                        buttons[i].setForeground(new Color(0, 0, 255));
                         buttons[i].setText("O");
                         player_turn = true;
                         textfield.setText("X Turn");
@@ -101,7 +101,7 @@ public class TicTacToe implements ActionListener {
     public void firstTurn() {
         // keeps the turn message away for a bit so you can see the title
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -114,132 +114,170 @@ public class TicTacToe implements ActionListener {
             textfield.setText("O turn");
         }
     }
-
+    
     public void check() {
         // if statements to check if there is 3 in a row
-        // check X win
-        if(
-            (buttons[0].getText()=="X") && 
-            (buttons[1].getText()=="X") &&
-            (buttons[2].getText()=="X")
-            ){
-            xWins(0, 1,2);
+        
+        // winning conditions
+        int[][] winningConditions = {
+            {0,1,2},{3,4,5},{6,7,8},
+            {0,3,6},{1,4,7},{2,5,8},
+            {0,4,8},{2,4,6}
+        };
+        
+        // checks for X win or O win
+        for( int[] condition : winningConditions){
+            if (buttons[condition[0]].getText().equals("X") &&
+            buttons[condition[1]].getText().equals("X") &&
+            buttons[condition[2]].getText().equals("X")){
+                xWins(condition[0], condition[1],condition[2]);
+                return;
+            }
+            if (buttons[condition[0]].getText().equals("O") &&
+            buttons[condition[1]].getText().equals("O") &&
+            buttons[condition[2]].getText().equals("O")){
+                oWins(condition[0], condition[1],condition[2]);
+                return;
+            }
         }
-        if(
-            (buttons[3].getText()=="X") && 
-            (buttons[4].getText()=="X") &&
-            (buttons[5].getText()=="X")
-            ){
-            xWins(3, 4,5);
+        
+        // check for cats game
+        boolean isCatGame = true;
+        for(int i = 0; i < buttons.length; i++){
+            if (buttons[i].getText().isEmpty()){
+                isCatGame = false;
+                return;
+            }
         }
-        if(
-            (buttons[6].getText()=="X") && 
-            (buttons[7].getText()=="X") &&
-            (buttons[8].getText()=="X")
-            ){
-            xWins(6, 7,8);
+        if (isCatGame) {
+            catsGame(0, 1, 2, 3, 4,5,6,7,8);
         }
-        if(
-            (buttons[0].getText()=="X") && 
-            (buttons[3].getText()=="X") &&
-            (buttons[6].getText()=="X")
-            ){
-            xWins(0, 3,6);
-        }
-        if(
-            (buttons[1].getText()=="X") && 
-            (buttons[4].getText()=="X") &&
-            (buttons[7].getText()=="X")
-            ){
-            xWins(1, 4,7);
-        }
-        if(
-            (buttons[2].getText()=="X") && 
-            (buttons[5].getText()=="X") &&
-            (buttons[8].getText()=="X")
-            ){
-            xWins(2, 5,8);
-        }
-        if(
-            (buttons[0].getText()=="X") && 
-            (buttons[4].getText()=="X") &&
-            (buttons[8].getText()=="X")
-            ){
-            xWins(0, 4,8);
-        }
-        if(
-            (buttons[2].getText()=="X") && 
-            (buttons[4].getText()=="X") &&
-            (buttons[6].getText()=="X")
-            ){
-            xWins(2, 4,6);
-        }
-        // check O win
-        if(
-            (buttons[0].getText()=="O") && 
-            (buttons[1].getText()=="O") &&
-            (buttons[2].getText()=="O")
-            ){
-            oWins(0, 1,2);
-        }
-        if(
-            (buttons[3].getText()=="O") && 
-            (buttons[4].getText()=="O") &&
-            (buttons[5].getText()=="O")
-            ){
-            oWins(3, 4,5);
-        }
-        if(
-            (buttons[6].getText()=="O") && 
-            (buttons[7].getText()=="O") &&
-            (buttons[8].getText()=="O")
-            ){
-            oWins(6, 7,8);
-        }
-        if(
-            (buttons[0].getText()=="O") && 
-            (buttons[3].getText()=="O") &&
-            (buttons[6].getText()=="O")
-            ){
-            oWins(0, 3,6);
-        }
-        if(
-            (buttons[1].getText()=="O") && 
-            (buttons[4].getText()=="O") &&
-            (buttons[7].getText()=="O")
-            ){
-            oWins(1, 4,7);
-        }
-        if(
-            (buttons[2].getText()=="O") && 
-            (buttons[5].getText()=="O") &&
-            (buttons[8].getText()=="O")
-            ){
-            oWins(2, 5,8);
-        }
-        if(
-            (buttons[0].getText()=="O") && 
-            (buttons[4].getText()=="O") &&
-            (buttons[8].getText()=="O")
-            ){
-            oWins(0, 4,8);
-        }
-        if(
-            (buttons[2].getText()=="O") && 
-            (buttons[4].getText()=="O") &&
-            (buttons[6].getText()=="O")
-            ){
-            oWins(2, 4,6);
-        }
+
+        // the logic above does the same as the logic below
+        
+        // // check X win
+        // if(
+            //     (buttons[0].getText()=="X") && 
+        //     (buttons[1].getText()=="X") &&
+        //     (buttons[2].getText()=="X")
+        //     ){
+        //     xWins(0, 1,2);
+        // }
+        // if(
+        //     (buttons[3].getText()=="X") && 
+        //     (buttons[4].getText()=="X") &&
+        //     (buttons[5].getText()=="X")
+        //     ){
+        //     xWins(3, 4,5);
+        // }
+        // if(
+        //     (buttons[6].getText()=="X") && 
+        //     (buttons[7].getText()=="X") &&
+        //     (buttons[8].getText()=="X")
+        //     ){
+        //     xWins(6, 7,8);
+        // }
+        // if(
+        //     (buttons[0].getText()=="X") && 
+        //     (buttons[3].getText()=="X") &&
+        //     (buttons[6].getText()=="X")
+        //     ){
+        //     xWins(0, 3,6);
+        // }
+        // if(
+        //     (buttons[1].getText()=="X") && 
+        //     (buttons[4].getText()=="X") &&
+        //     (buttons[7].getText()=="X")
+        //     ){
+        //     xWins(1, 4,7);
+        // }
+        // if(
+        //     (buttons[2].getText()=="X") && 
+        //     (buttons[5].getText()=="X") &&
+        //     (buttons[8].getText()=="X")
+        //     ){
+        //     xWins(2, 5,8);
+        // }
+        // if(
+        //     (buttons[0].getText()=="X") && 
+        //     (buttons[4].getText()=="X") &&
+        //     (buttons[8].getText()=="X")
+        //     ){
+        //     xWins(0, 4,8);
+        // }
+        // if(
+        //     (buttons[2].getText()=="X") && 
+        //     (buttons[4].getText()=="X") &&
+        //     (buttons[6].getText()=="X")
+        //     ){
+        //     xWins(2, 4,6);
+        // }
+        // // check O win
+        // if(
+        //     (buttons[0].getText()=="O") && 
+        //     (buttons[1].getText()=="O") &&
+        //     (buttons[2].getText()=="O")
+        //     ){
+        //     oWins(0, 1,2);
+        // }
+        // if(
+        //     (buttons[3].getText()=="O") && 
+        //     (buttons[4].getText()=="O") &&
+        //     (buttons[5].getText()=="O")
+        //     ){
+        //     oWins(3, 4,5);
+        // }
+        // if(
+        //     (buttons[6].getText()=="O") && 
+        //     (buttons[7].getText()=="O") &&
+        //     (buttons[8].getText()=="O")
+        //     ){
+        //     oWins(6, 7,8);
+        // }
+        // if(
+        //     (buttons[0].getText()=="O") && 
+        //     (buttons[3].getText()=="O") &&
+        //     (buttons[6].getText()=="O")
+        //     ){
+        //     oWins(0, 3,6);
+        // }
+        // if(
+        //     (buttons[1].getText()=="O") && 
+        //     (buttons[4].getText()=="O") &&
+        //     (buttons[7].getText()=="O")
+        //     ){
+        //     oWins(1, 4,7);
+        // }
+        // if(
+        //     (buttons[2].getText()=="O") && 
+        //     (buttons[5].getText()=="O") &&
+        //     (buttons[8].getText()=="O")
+        //     ){
+        //     oWins(2, 5,8);
+        // }
+        // if(
+        //     (buttons[0].getText()=="O") && 
+        //     (buttons[4].getText()=="O") &&
+        //     (buttons[8].getText()=="O")
+        //     ){
+        //     oWins(0, 4,8);
+        // }
+        // if(
+        //     (buttons[2].getText()=="O") && 
+        //     (buttons[4].getText()=="O") &&
+        //     (buttons[6].getText()=="O")
+        //     ){
+        //     oWins(2, 4,6);
+        // }
+
 
     }
 
     public void xWins(int a, int b, int c) {
         // if X wins
-        buttons[a].setBackground(Color.CYAN);
-        buttons[b].setBackground(Color.CYAN);
-        buttons[c].setBackground(Color.CYAN);
-
+        buttons[a].setBackground(Color.red);
+        buttons[b].setBackground(Color.red);
+        buttons[c].setBackground(Color.red);
         // disables buttons
         for(int i = 0; i < 9; i++){
             buttons[i].setEnabled(false);
@@ -249,14 +287,31 @@ public class TicTacToe implements ActionListener {
 
     public void oWins(int a, int b, int c) {
         // if O wins 
-        buttons[a].setBackground(Color.orange);
-        buttons[b].setBackground(Color.orange);
-        buttons[c].setBackground(Color.orange);
-
+        buttons[a].setBackground(Color.blue);
+        buttons[b].setBackground(Color.blue);
+        buttons[c].setBackground(Color.blue);
         // disables buttons
         for(int i = 0; i < 9; i++){
             buttons[i].setEnabled(false);
         }
         textfield.setText("O Wins!");
+    }
+
+    public void catsGame(int a, int b, int c, int d, int e, int f, int g, int h, int j){
+        // change background color if ther is a cats game
+        buttons[a].setBackground(Color.orange);
+        buttons[b].setBackground(Color.orange);
+        buttons[c].setBackground(Color.orange);
+        buttons[d].setBackground(Color.orange);
+        buttons[e].setBackground(Color.orange);
+        buttons[f].setBackground(Color.orange);
+        buttons[g].setBackground(Color.orange);
+        buttons[h].setBackground(Color.orange);
+        buttons[j].setBackground(Color.orange);
+        // disables buttons
+        for(int i = 0; i < 9; i++){
+            buttons[i].setEnabled(false);
+        }
+        textfield.setText("Cats Game!");
     }
 }

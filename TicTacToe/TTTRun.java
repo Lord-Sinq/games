@@ -5,7 +5,7 @@
  */
 package TicTacToe;
 
-public class Main {
+public class TTTRun {
     public static void main(String[] args) {
         
         new TicTacToe();
