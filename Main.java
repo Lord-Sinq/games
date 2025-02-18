@@ -1,14 +1,14 @@
 /*
- * @purpose Used as a game lauch menu
- * @author Sinclair DeYoung
- * @since 12-02-2025
- */
+* @purpose Used as a game lauch menu
+* @author Sinclair DeYoung
+* @since 12-02-2025
+*/
 
- // Imports for logic
- import javax.swing.*;
- import java.awt.*;
- import java.awt.event.ActionEvent;
- import java.awt.event.ActionListener;
+// Imports for logic
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 // Import for the games
 import TicTacToe.TTTRun;
 import Snake.SnakeGame;

@@ -186,13 +186,13 @@ public class TicTacToe extends JFrame implements ActionListener {
     public void catsGame(int a, int b, int c, int d, int e, int f, int g, int h, int j){
         System.out.println("Cats Game");
         // change background color if ther is a cats game
-        buttons[a].setBackground(Color.black);
+        buttons[a].setBackground(Color.orange);
         buttons[b].setBackground(Color.orange);
         buttons[c].setBackground(Color.orange);
         buttons[d].setBackground(Color.orange);
-        buttons[e].setBackground(Color.black);
-        buttons[f].setBackground(Color.black);
-        buttons[g].setBackground(Color.black);
+        buttons[e].setBackground(Color.orange);
+        buttons[f].setBackground(Color.orange);
+        buttons[g].setBackground(Color.orange);
         buttons[h].setBackground(Color.orange);
         buttons[j].setBackground(Color.orange);
         // disables buttons
