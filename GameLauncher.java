@@ -22,7 +22,7 @@ public class GameLauncher {
     static final int SCREEN_WIDTH = 300;
     static final int SCREEN_HEIGHT = 200;
 
-    public Main() {
+    public GameLauncher() {
         createAndShowGUI();
     }
     private void createAndShowGUI() {
@@ -81,7 +81,7 @@ public class GameLauncher {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Main();
+                new GameLauncher();
             }
         });
     }
