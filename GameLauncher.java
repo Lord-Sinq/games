@@ -1,7 +1,7 @@
 /*
 * @purpose Used as a game lauch menu
 * @author Sinclair DeYoung
-* @since 12-02-2025
+* @since 18-02-2025
 */
 
 // Imports for logic
@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import TicTacToe.TTTRun;
 import Snake.SnakeGame;
 
-public class Main {
+public class GameLauncher {
 
     // initialize the JFrame and JButtons
     private JFrame frame;
@@ -31,6 +31,8 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
         frame.setLayout(new FlowLayout());
+
+        
 
         // create buttons
         // System.out.println("Creating buttons");
