@@ -1,12 +1,10 @@
 package Snake;
 
-import java.awt.Panel;
-
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame {
     
-    GameFrame() {
+    public GameFrame() {
         
         // Setting the frame information
         this.add(new GamePanel());
@@ -23,5 +21,6 @@ public class GameFrame extends JFrame {
         // set the frame visible after adding components
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+        gamePanel.requestFocusInWindow();
     }
 }

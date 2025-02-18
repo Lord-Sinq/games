@@ -5,10 +5,11 @@
  */
 package TicTacToe;
 
+import javax.swing.*;
 public class TTTRun {
     public static void main(String[] args) {
-        
-        new TicTacToe();
-        
+        // Create a new TicTacToe object
+        System.out.println("Creating a new TicTacToe object");
+        SwingUtilities.invokeLater(() -> new TicTacToe());
     }
 }

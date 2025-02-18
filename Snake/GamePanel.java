@@ -1,10 +1,10 @@
 package Snake;
 
-import javax.swing.Timer;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import javax.swing.*;
+import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener {
 
@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements ActionListener {
     Timer timer;
     Random random;
 
-    GamePanel(){
+    public GamePanel(){
         // setting the game panel and starting the game
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -34,6 +34,10 @@ public class GamePanel extends JPanel implements ActionListener {
         StartGame();
     }
     public void StartGame() {
+        // starts the game
+        bodyParts = 6;
+        x[0] = 0;
+        y[0] = 0;
         newApple();
         running = true;
         timer = new Timer(DELAY, this);
@@ -127,7 +131,7 @@ public class GamePanel extends JPanel implements ActionListener {
             running = false;
         }
         // checks if head touches right border
-        if(x[0] > SCREEN_WIDTH ){
+        if(x[0] >= SCREEN_WIDTH ){
             running = false;
         }
         // checks if head touches top border
@@ -135,7 +139,7 @@ public class GamePanel extends JPanel implements ActionListener {
             running = false;
         }
         // checks if head touches bottom border
-        if(y[0] > SCREEN_WIDTH ){
+        if(y[0] >= SCREEN_WIDTH ){
             running = false;
         }
 
