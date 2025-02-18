@@ -26,14 +26,14 @@ public class Main {
         createAndShowGUI();
     }
     private void createAndShowGUI() {
-        System.out.println("Creating the GUI");
+        // System.out.println("Creating the GUI");
         frame = new JFrame("Game Launcher");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
         frame.setLayout(new FlowLayout());
 
         // create buttons
-        System.out.println("Creating buttons");
+        // System.out.println("Creating buttons");
         tttButton = new JButton("Tic Tac Toe");
         snakeButton = new JButton("Snake Game");
 
@@ -41,14 +41,14 @@ public class Main {
         tttButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                System.out.println("Tic Tac Toe launch button in the Active listener");
+                // System.out.println("Tic Tac Toe launch button in the Active listener");
                 lauchTTT();
             }
         });
         snakeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                System.out.println("Snake Game launch button in the Active listener");
+                // System.out.println("Snake Game launch button in the Active listener");
                 lauchSnake();
             }
         });
@@ -65,14 +65,13 @@ public class Main {
     }
     private void lauchTTT() {
         // lanuches tic tac toe
-        System.out.println("Tic Tac Toe launch area");
+        // System.out.println("Tic Tac Toe launch area");
         // new TTTRun();
-        
         SwingUtilities.invokeLater(() -> TTTRun.main(null));  
     }
     private void lauchSnake() {
         // lanuches Snake Game
-        System.out.println("Snake Game launch area");
+        // System.out.println("Snake Game launch area");
         SwingUtilities.invokeLater(() -> SnakeGame.main(null));
     }
 
