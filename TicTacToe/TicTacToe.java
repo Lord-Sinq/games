@@ -24,7 +24,7 @@ public class TicTacToe extends JFrame implements ActionListener {
 
     public TicTacToe() {
         // builds the frame 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setTitle("Tic Tac Toe");
         frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         frame.getContentPane().setBackground(Color.BLACK);
@@ -102,7 +102,7 @@ public class TicTacToe extends JFrame implements ActionListener {
     }
 
     public void firstTurn() {
-        // keeps the turn message away for a bit so you can see the title
+        // waits 1.5 seconds before starting the game
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {

@@ -61,8 +61,9 @@ public class GameLauncher {
 
         // create title label
         JLabel titleLabel = new JLabel("Game Launcher");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // center the label
         mainPanel.add(titleLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20))); // add space between title and buttons
 
@@ -80,23 +81,8 @@ public class GameLauncher {
         snakeButton.addActionListener(l -> lauchSnake()); // lambda expression
         buttonPanel.add(tttButton);
         buttonPanel.add(snakeButton);
-
-        mainPanel.add(buttonPanel); // add button panel to main panel
-
-        // add listeners to buttons
-        tttButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                lauchTTT();
-            }
-        });
-        snakeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                lauchSnake();
-            }
-        });
-
+        // add button panel to main panel
+        mainPanel.add(buttonPanel); 
         //make the frame visiable
         frame.setVisible(true);
     }
@@ -105,29 +91,38 @@ public class GameLauncher {
     private void styleButton(JButton button) {
         button.setFont(new Font("Arial", Font.PLAIN, 15));
         button.setForeground(Color.DARK_GRAY);
-        button.setBackground(Color.MAGENTA);
+        button.setBackground(new Color(219, 88, 171));
         button.setFocusPainted(false);
+        button.setBorderPainted(false); // remove border
+        button.setOpaque(true);
 
         // hover effect
         button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(Color.PINK);
+                button.setBackground(new Color(219, 140, 201));
             }
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(Color.MAGENTA);
+                button.setBackground(new Color(219, 88, 171));
             }
         });
 
     }
 
+    // show the main menu
+    public void showMainMenu() {
+        frame.setVisible(true);
+    }
+
     private void lauchTTT() {
         // lanuches tic tac toe
-        JOptionPane.showMessageDialog(frame, "Lauching Tic Tac Toe...");
+        frame.setVisible(false); // set the launcher to invisible
         SwingUtilities.invokeLater(() -> TTTRun.main(null));  
     }
     private void lauchSnake() {
         // lanuches Snake Game
-        JOptionPane.showMessageDialog(frame, "Lauching Snake Game...");
+        frame.setVisible(false); // set the launcher to invisible
         SwingUtilities.invokeLater(() -> SnakeGame.main(null));
     }
 
