@@ -159,6 +159,20 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setFont(new Font("Ink Free", Font.BOLD, 75));
         FontMetrics metrics2 = getFontMetrics(g.getFont());
         g.drawString("Game Over", (SCREEN_WIDTH - metrics2.stringWidth("Game Over"))/2, SCREEN_HEIGHT/2);
+
+
+        // Restart text
+        g.setColor(Color.red);
+        g.setFont(new Font("Ink Free", Font.BOLD, 35));
+        FontMetrics metrics3 = getFontMetrics(g.getFont());
+        g.drawString("Press Enter to Restart", (SCREEN_WIDTH - metrics3.stringWidth("Press Enter to Restart"))/2, SCREEN_HEIGHT/2 + 50);
+
+        // Exit text
+        g.setColor(Color.red);
+        g.setFont(new Font("Ink Free", Font.BOLD, 35));
+        FontMetrics metrics4 = getFontMetrics(g.getFont());
+        g.drawString("Press Escape to Exit", (SCREEN_WIDTH - metrics4.stringWidth("Press Escape to Exit"))/2, SCREEN_HEIGHT/2 + 100);
+
     }
 
 
@@ -171,6 +185,7 @@ public class GamePanel extends JPanel implements ActionListener {
             checkCollisions();
         }
         repaint();
+
 
     }
 
@@ -199,6 +214,20 @@ public class GamePanel extends JPanel implements ActionListener {
                         direction = 'D';
                     }
                     break;
+            }
+            // Restart game
+            // If the game is over and the user presses enter, restart the game
+            // If the game is running and the user presses enter, do nothing
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (!running) {
+                    StartGame();
+                }
+            }
+            // Exit game
+            // If the game is over and the user presses escape, exit the game
+            // If the game is running and the user presses escape, exit the game
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                System.exit(0);
             }
         }
     }
