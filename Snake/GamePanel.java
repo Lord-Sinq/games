@@ -189,7 +189,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     }
 
-    public class MyKeyAdapter extends KeyAdapter {
+    public class MyKeyAdapter extends KeyAdapter { // key listener
         // Allows correct mapping of user keys
         @Override
         public void keyPressed(KeyEvent e){
@@ -213,6 +213,28 @@ public class GamePanel extends JPanel implements ActionListener {
                     if(direction != 'U'){
                         direction = 'D';
                     }
+                    break;
+                case KeyEvent.VK_SPACE:
+                    if(!running){
+                        StartGame();
+                    }
+                    break;
+                // Exit game
+                case KeyEvent.VK_ESCAPE:
+                    System.exit(0);
+                    break;
+                // Restart game
+                case KeyEvent.VK_ENTER:
+                    if(!running){
+                        StartGame();
+                    }
+                    break;
+
+// imput map and action event 
+
+                // Default case
+                // If the user presses any other key, do nothing
+                default:
                     break;
             }
             // Restart game
