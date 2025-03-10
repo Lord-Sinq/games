@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 // Import for the games
 import TicTacToe.TTTRun;
 import Snake.SnakeGame;
+import Solitaire.SolitaireRun;
 import java.util.concurrent.Flow;
 import javax.imageio.IIOException;
 
@@ -21,6 +22,8 @@ public class GameLauncher {
     private JFrame frame;
     private JButton tttButton;
     private JButton snakeButton;
+    private JButton solitaireButton;
+    // set the screen size
     static final int SCREEN_WIDTH = 400;
     static final int SCREEN_HEIGHT = 300;
 
@@ -75,12 +78,17 @@ public class GameLauncher {
         // create buttons
         tttButton = new JButton("Tic Tac Toe");
         snakeButton = new JButton("Snake Game");
+        solitaireButton = new JButton("Solitaire");
+        // set button size
         styleButton(tttButton); // add style to buttons
         styleButton(snakeButton); // add style to buttons
+        styleButton(solitaireButton); // add style to buttons
         tttButton.addActionListener(l -> lauchTTT()); // lambda expression
         snakeButton.addActionListener(l -> lauchSnake()); // lambda expression
+        solitaireButton.addActionListener(l -> lauchSolitaire()); // lambda expression
         buttonPanel.add(tttButton);
         buttonPanel.add(snakeButton);
+        buttonPanel.add(solitaireButton);
         // add button panel to main panel
         mainPanel.add(buttonPanel); 
         //make the frame visiable
@@ -124,6 +132,11 @@ public class GameLauncher {
         // lanuches Snake Game
         frame.setVisible(false); // set the launcher to invisible
         SwingUtilities.invokeLater(() -> SnakeGame.main(null));
+    }
+    private void lauchSolitaire() {
+        // lanuches Snake Game
+        frame.setVisible(false); // set the launcher to invisible
+        SwingUtilities.invokeLater(() -> SolitaireRun.main(null));
     }
 
     public static void main(String[] args) {
