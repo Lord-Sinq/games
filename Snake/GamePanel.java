@@ -31,8 +31,17 @@ public class GamePanel extends JPanel implements ActionListener {
         this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
+        //this.grabFocus(); // allows the panel to listen to key events
+        this.requestFocusInWindow(); // allows the panel to listen to key events
         StartGame();
     }
+
+    // setting focus to the panel
+    // @Override
+    // public boolean isFocusable() {
+    //     return true;
+    // }
+
     public void StartGame() {
         // starts the game
         bodyParts = 6;
@@ -43,6 +52,8 @@ public class GamePanel extends JPanel implements ActionListener {
         timer = new Timer(DELAY, this);
         timer.start();
     }
+
+    @Override  
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         draw(g);
@@ -78,6 +89,8 @@ public class GamePanel extends JPanel implements ActionListener {
             FontMetrics metrics = getFontMetrics(g.getFont());
             g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
         } else {
+            // Timer stop
+            timer.stop();
             gameOver(g);
         }
 
@@ -139,7 +152,7 @@ public class GamePanel extends JPanel implements ActionListener {
             running = false;
         }
         // checks if head touches bottom border
-        if(y[0] >= SCREEN_WIDTH ){
+        if(y[0] >= SCREEN_HEIGHT ){
             running = false;
         }
 
@@ -160,7 +173,6 @@ public class GamePanel extends JPanel implements ActionListener {
         FontMetrics metrics2 = getFontMetrics(g.getFont());
         g.drawString("Game Over", (SCREEN_WIDTH - metrics2.stringWidth("Game Over"))/2, SCREEN_HEIGHT/2);
 
-
         // Restart text
         g.setColor(Color.red);
         g.setFont(new Font("Ink Free", Font.BOLD, 35));
@@ -171,7 +183,7 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setColor(Color.red);
         g.setFont(new Font("Ink Free", Font.BOLD, 35));
         FontMetrics metrics4 = getFontMetrics(g.getFont());
-        g.drawString("Press Escape to Exit", (SCREEN_WIDTH - metrics4.stringWidth("Press Escape to Exit"))/2, SCREEN_HEIGHT/2 + 100);
+        g.drawString("Press Escape to Exit", (SCREEN_WIDTH - metrics4.stringWidth("Press Escape to Exit"))/2, SCREEN_HEIGHT/2 + 75);
 
     }
 
@@ -186,71 +198,76 @@ public class GamePanel extends JPanel implements ActionListener {
         }
         repaint();
 
-
     }
 
-    public class MyKeyAdapter extends KeyAdapter { // key listener
+    public class MyKeyAdapter extends KeyAdapter {
         // Allows correct mapping of user keys
         @Override
         public void keyPressed(KeyEvent e){
+            System.out.println("in key pressed");
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
+                    System.out.println("in left key case");
                     if(direction != 'R'){
                         direction = 'L';
                     }
                     break;
                 case KeyEvent.VK_RIGHT:
+                    System.out.println("in right key case");
                     if(direction != 'L'){
                         direction = 'R';
                     }
                     break;
                 case KeyEvent.VK_UP:
+                    System.err.println("in up key case");
                     if(direction != 'D'){
                         direction = 'U';
                     }
                     break;
                 case KeyEvent.VK_DOWN:
+                    System.out.println("in down key case");
                     if(direction != 'U'){
                         direction = 'D';
                     }
                     break;
                 case KeyEvent.VK_SPACE:
+                    System.out.println("in space key case");
                     if(!running){
                         StartGame();
                     }
                     break;
                 // Exit game
                 case KeyEvent.VK_ESCAPE:
+                    System.out.println("in escape key case");
                     System.exit(0);
                     break;
                 // Restart game
                 case KeyEvent.VK_ENTER:
+                    System.out.println("in enter key case");
                     if(!running){
                         StartGame();
                     }
                     break;
 
-// imput map and action event 
-
                 // Default case
                 // If the user presses any other key, do nothing
                 default:
                     break;
-            }
-            // Restart game
-            // If the game is over and the user presses enter, restart the game
-            // If the game is running and the user presses enter, do nothing
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                if (!running) {
-                    StartGame();
-                }
-            }
-            // Exit game
-            // If the game is over and the user presses escape, exit the game
-            // If the game is running and the user presses escape, exit the game
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                System.exit(0);
-            }
+            // }
+            // // Restart game
+            // // If the game is over and the user presses enter, restart the game
+            // // If the game is running and the user presses enter, do nothing
+            // if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            //     if (!running) {
+            //         StartGame();
+            //     }
+            // }
+            // // Exit game
+            // // If the game is over and the user presses escape, exit the game
+            // // If the game is running and the user presses escape, exit the game
+            // if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            //     System.exit(0);
+            // }
         }
     }
 }
