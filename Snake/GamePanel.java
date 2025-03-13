@@ -63,13 +63,11 @@ public class GamePanel extends JPanel implements ActionListener {
         if (gameMenu == GameMenu.PLAY) {
 
             if(running) {
-                
                 // Adds grid lines to the panel 
                 // for (int i=0; i<SCREEN_HEIGHT/UNIT_SIZE;i++){
                 //     g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
                 //     g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);
                 // }
-                
                 // draw apple
                 g.setColor(Color.RED);
                 g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
@@ -263,42 +261,42 @@ public class GamePanel extends JPanel implements ActionListener {
         // Allows correct mapping of user keys
         @Override
         public void keyPressed(KeyEvent e){
-            System.out.println("in key pressed");
+            // System.out.println("in key pressed");
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
-                    System.out.println("in left key case");
+                    // System.out.println("in left key case");
                     if(direction != 'R'){
                         direction = 'L';
                     }
                     break;
                 case KeyEvent.VK_RIGHT:
-                    System.out.println("in right key case");
+                    // System.out.println("in right key case");
                     if(direction != 'L'){
                         direction = 'R';
                     }
                     break;
                 case KeyEvent.VK_UP:
-                    System.err.println("in up key case");
+                    // System.out.println("in up key case");
                     if(direction != 'D'){
                         direction = 'U';
                     }
                     break;
                 case KeyEvent.VK_DOWN:
-                    System.out.println("in down key case");
+                    // System.out.println("in down key case");
                     if(direction != 'U'){
                         direction = 'D';
                     }
                     break;
                 case KeyEvent.VK_P:
-                    System.out.println("in pause"); 
+                    // System.out.println("in pause"); 
                     gameMenu = (gameMenu == GameMenu.PLAY) ? GameMenu.PAUSE : GameMenu.PLAY;
                     break;
                 case KeyEvent.VK_R:
-                    System.out.println("restarted");
+                    // System.out.println("restarted");
                     StartGame();
                     break;
                 case KeyEvent.VK_ESCAPE:
-                    System.out.println("escape");
+                    // System.out.println("escape");
                     frame.dispose();
                     break;
                 // Default case
