@@ -59,7 +59,7 @@ public class Solitaire extends JFrame implements ActionListener {
         // starts the frame
     }
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
+  
         for (int i = 0; i < 9; i++) {
             if (e.getSource() == buttons[i]) {
                 System.out.println("Button " + i + " was pressed");

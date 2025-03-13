@@ -7,14 +7,12 @@ public class GameFrame extends JFrame {
     public GameFrame() {
         
         // Setting the frame information
-        this.add(new GamePanel());
+        // ensure the panel is properly initialized
+        GamePanel gamePanel = new GamePanel(this);
+        this.add(gamePanel);
         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-
-        // ensure the panel is properly initialized
-        GamePanel gamePanel = new GamePanel();
-        this.add(gamePanel);
 
         // Pack the frame to ensure proper sizing
         this.pack();

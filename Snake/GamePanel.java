@@ -1,5 +1,6 @@
 package Snake;
 
+import Snake.GamePanel.GameMenu;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -13,6 +14,8 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT)/UNIT_SIZE;
     static final int DELAY = 70;
+    private JFrame frame;
+    private GameMenu gameMenu = GameMenu.PLAY;
     final int x[] = new int[GAME_UNITS];
     final int y[] = new int[GAME_UNITS];
     int bodyParts = 6;
@@ -24,29 +27,25 @@ public class GamePanel extends JPanel implements ActionListener {
     Timer timer;
     Random random;
 
-    public GamePanel(){
+    public GamePanel(JFrame frame){
         // setting the game panel and starting the game
         random = new Random();
+        this.frame = frame; // store JFrame reference
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
-        //this.grabFocus(); // allows the panel to listen to key events
         this.requestFocusInWindow(); // allows the panel to listen to key events
         StartGame();
     }
 
-    // setting focus to the panel
-    // @Override
-    // public boolean isFocusable() {
-    //     return true;
-    // }
-
     public void StartGame() {
         // starts the game
         bodyParts = 6;
+        applesEaten = 0;
         x[0] = 0;
         y[0] = 0;
+        direction = 'R';
         newApple();
         running = true;
         timer = new Timer(DELAY, this);
@@ -55,43 +54,49 @@ public class GamePanel extends JPanel implements ActionListener {
 
     @Override  
     public void paintComponent(Graphics g){
+        //System.out.println("running = " + running);
         super.paintComponent(g);
         draw(g);
     }
     public void draw(Graphics g){
 
-        if(running) {
-            
-            /* Adds grid lines to the panel 
-            for (int i=0; i<SCREEN_HEIGHT/UNIT_SIZE;i++){
-                g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
-                g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);
-            }
-            */
-            // draw apple
-            g.setColor(Color.red);
-            g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+        if (gameMenu == GameMenu.PLAY) {
 
-            // draw snake 
-            for (int i = 0; i < bodyParts; i++){
-                // draw snake head
-                if(i==0){
-                    g.setColor(new Color(3,252,53));
-                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
-                } else {
-                // draw snake body
-                    g.setColor(new Color(3,252,140));
-                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+            if(running) {
+                
+                // Adds grid lines to the panel 
+                // for (int i=0; i<SCREEN_HEIGHT/UNIT_SIZE;i++){
+                //     g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
+                //     g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);
+                // }
+                
+                // draw apple
+                g.setColor(Color.RED);
+                g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+
+                // draw snake 
+                for (int i = 0; i < bodyParts; i++){
+                    // draw snake head
+                    if(i==0){
+                        g.setColor(new Color(3,252,53));
+                        g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                    } else {
+                    // draw snake body
+                        g.setColor(new Color(3,252,140));
+                        g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                    }
                 }
+                g.setColor(new Color(198, 64, 222));
+                g.setFont(new Font("Bauhaus 93", Font.BOLD, 40));
+                FontMetrics metrics = getFontMetrics(g.getFont());
+                g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
+            } else {
+                // Timer stop
+                timer.stop();
+                gameOver(g);
             }
-            g.setColor(Color.red);
-            g.setFont(new Font("Ink Free", Font.BOLD, 40));
-            FontMetrics metrics = getFontMetrics(g.getFont());
-            g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
-        } else {
-            // Timer stop
-            timer.stop();
-            gameOver(g);
+        } else if (gameMenu == GameMenu.PAUSE) {
+            gamePause(g);
         }
 
     }
@@ -100,88 +105,142 @@ public class GamePanel extends JPanel implements ActionListener {
         appleY = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE))*UNIT_SIZE;
     }
 
-    public void move(){
-        
-        for (int i = bodyParts; i > 0; i--){
-            x[i] = x[i-1];
-            y[i] = y[i-1];
-        }
+    enum GameMenu {
+        PLAY, PAUSE, RESTART, EXIT
+    }
 
-        switch (direction) {
-            case 'U':
-                y[0] = y[0] - UNIT_SIZE;
-                break;
-            case 'D':
-                y[0] = y[0] + UNIT_SIZE;
-                break;
-            case 'L':
-                x[0] = x[0] - UNIT_SIZE;
-                break;
-            case 'R':
-                x[0] = x[0] + UNIT_SIZE;
-                break;
+    public void move(){
+        if(running) {
+            switch (gameMenu) {
+                case PLAY:
+                    for (int i = bodyParts; i > 0; i--){
+                        x[i] = x[i-1];
+                        y[i] = y[i-1];
+                    }
+                    
+                    switch (direction) {
+                        case 'U':
+                            y[0] = y[0] - UNIT_SIZE;
+                            break;
+                        case 'D':
+                            y[0] = y[0] + UNIT_SIZE;
+                            break;
+                        case 'L':
+                            x[0] = x[0] - UNIT_SIZE;
+                            break;
+                        case 'R':
+                            x[0] = x[0] + UNIT_SIZE;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case PAUSE:
+                    return;
+                case RESTART:
+                    StartGame();
+                    break;
+                case EXIT:
+                    frame.dispose();
+                default:
+                    throw new AssertionError();
+            }
         }
 
     }
     public void checkApple() {
-
-        if((x[0] == appleX) && (y[0] == appleY)){
-            bodyParts++;
-            applesEaten++;
-            newApple();
+        if(running) {
+            if((x[0] == appleX) && (y[0] == appleY)){
+                bodyParts++;
+                applesEaten++;
+                newApple();
+            }
         }
 
     }
     public void checkCollisions() {
         // checks if head collids with body
-        for (int i = bodyParts; i > 0; i--){
-            if((x[0] ==x[i]) && y[0] == y[i]){
+        if(running) {
+            for (int i = bodyParts - 1; i > 0; i--){
+                if((x[0] ==x[i]) && y[0] == y[i]){
+                    running = false;
+                }
+            }
+            // checks if head touches left border
+            if(x[0] < 0 ){
                 running = false;
             }
-        }
-        // checks if head touches left border
-        if(x[0] < 0 ){
-            running = false;
-        }
-        // checks if head touches right border
-        if(x[0] >= SCREEN_WIDTH ){
-            running = false;
-        }
-        // checks if head touches top border
-        if(y[0] < 0 ){
-            running = false;
-        }
-        // checks if head touches bottom border
-        if(y[0] >= SCREEN_HEIGHT ){
-            running = false;
-        }
+            // checks if head touches right border
+            if(x[0] >= SCREEN_WIDTH ){
+                running = false;
+            }
+            // checks if head touches top border
+            if(y[0] < 0 ){
+                running = false;
+            }
+            // checks if head touches bottom border
+            if(y[0] >= SCREEN_HEIGHT ){
+                running = false;
+            }
 
-        if (!running){
-            timer.stop();
+            if (!running){
+                timer.stop();
+            }
         }
     }
+
+    public void gamePause(Graphics g) {
+        // Pasue menu
+        // show current score 
+        g.setColor(new Color(198, 64, 222));
+        g.setFont(new Font("Bauhaus 93", Font.BOLD, 40));
+        FontMetrics metrics1 = getFontMetrics(g.getFont());
+        g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics1.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
+        // pause menu text
+        g.setColor(new Color(198, 64, 222));
+        g.setFont(new Font("Bauhaus 93", Font.BOLD, 75));
+        FontMetrics metrics2 = getFontMetrics(g.getFont());
+        g.drawString("Paused", (SCREEN_WIDTH - metrics2.stringWidth("Paused"))/2, SCREEN_HEIGHT/2);
+
+        // Restart text
+        g.setColor(new Color(198, 64, 222));
+        g.setFont(new Font("Bauhaus 93", Font.BOLD, 35));
+        FontMetrics metrics3 = getFontMetrics(g.getFont());
+        g.drawString("Press R to Restart", (SCREEN_WIDTH - metrics3.stringWidth("Press R to Restart"))/2, SCREEN_HEIGHT/2 + 50);
+
+        // Exit text
+        g.setColor(new Color(198, 64, 222));
+        g.setFont(new Font("Bauhaus 93", Font.BOLD, 35));
+        FontMetrics metrics4 = getFontMetrics(g.getFont());
+        g.drawString("Press Escape to Exit", (SCREEN_WIDTH - metrics4.stringWidth("Press Escape to Exit"))/2, SCREEN_HEIGHT/2 + 75);
+
+
+    }
+
+
+
     public void gameOver(Graphics g) {
         // Score text
-        g.setColor(Color.red);
-        g.setFont(new Font("Ink Free", Font.BOLD, 40));
+        g.setColor(new Color(198, 64, 222));
+        g.setFont(new Font("Bauhaus 93", Font.BOLD, 40));
         FontMetrics metrics1 = getFontMetrics(g.getFont());
         g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics1.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
 
         // Game over text
-        g.setColor(Color.red);
-        g.setFont(new Font("Ink Free", Font.BOLD, 75));
+        g.setColor(new Color(198, 64, 222));
+        g.setFont(new Font("Bauhaus 93", Font.BOLD, 75));
         FontMetrics metrics2 = getFontMetrics(g.getFont());
         g.drawString("Game Over", (SCREEN_WIDTH - metrics2.stringWidth("Game Over"))/2, SCREEN_HEIGHT/2);
 
         // Restart text
-        g.setColor(Color.red);
-        g.setFont(new Font("Ink Free", Font.BOLD, 35));
+        g.setColor(new Color(198, 64, 222));
+        g.setFont(new Font("Bauhaus 93", Font.BOLD, 35));
         FontMetrics metrics3 = getFontMetrics(g.getFont());
-        g.drawString("Press Enter to Restart", (SCREEN_WIDTH - metrics3.stringWidth("Press Enter to Restart"))/2, SCREEN_HEIGHT/2 + 50);
+        g.drawString("Press R to Restart", (SCREEN_WIDTH - metrics3.stringWidth("Press R to Restart"))/2, SCREEN_HEIGHT/2 + 50);
 
         // Exit text
-        g.setColor(Color.red);
-        g.setFont(new Font("Ink Free", Font.BOLD, 35));
+        g.setColor(new Color(198, 64, 222));
+        g.setFont(new Font("Bauhaus 93", Font.BOLD, 35));
         FontMetrics metrics4 = getFontMetrics(g.getFont());
         g.drawString("Press Escape to Exit", (SCREEN_WIDTH - metrics4.stringWidth("Press Escape to Exit"))/2, SCREEN_HEIGHT/2 + 75);
 
@@ -191,7 +250,7 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // the game actions
-        if(running) {
+        if(running && gameMenu == GameMenu.PLAY) {
             move();
             checkApple();
             checkCollisions();
@@ -230,44 +289,23 @@ public class GamePanel extends JPanel implements ActionListener {
                         direction = 'D';
                     }
                     break;
-                case KeyEvent.VK_SPACE:
-                    System.out.println("in space key case");
-                    if(!running){
-                        StartGame();
-                    }
+                case KeyEvent.VK_P:
+                    System.out.println("in pause"); 
+                    gameMenu = (gameMenu == GameMenu.PLAY) ? GameMenu.PAUSE : GameMenu.PLAY;
                     break;
-                // Exit game
+                case KeyEvent.VK_R:
+                    System.out.println("restarted");
+                    StartGame();
+                    break;
                 case KeyEvent.VK_ESCAPE:
-                    System.out.println("in escape key case");
-                    System.exit(0);
+                    System.out.println("escape");
+                    frame.dispose();
                     break;
-                // Restart game
-                case KeyEvent.VK_ENTER:
-                    System.out.println("in enter key case");
-                    if(!running){
-                        StartGame();
-                    }
-                    break;
-
                 // Default case
                 // If the user presses any other key, do nothing
                 default:
                     break;
-            // }
-            // // Restart game
-            // // If the game is over and the user presses enter, restart the game
-            // // If the game is running and the user presses enter, do nothing
-            // if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            //     if (!running) {
-            //         StartGame();
-            //     }
-            // }
-            // // Exit game
-            // // If the game is over and the user presses escape, exit the game
-            // // If the game is running and the user presses escape, exit the game
-            // if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            //     System.exit(0);
-            // }
+             }
         }
     }
 }

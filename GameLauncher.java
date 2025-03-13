@@ -1,4 +1,4 @@
-/*
+ /*
 * @purpose Used as a game lauch menu
 * @author Sinclair DeYoung
 * @since 18-02-2025
@@ -107,7 +107,7 @@ public class GameLauncher {
         // hover effect
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(java.awt.event.MouseEvent evt) { 
                 button.setBackground(new Color(219, 140, 201));
             }
             @Override
