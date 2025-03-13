@@ -18,6 +18,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private GameMenu gameMenu = GameMenu.PLAY;
     final int x[] = new int[GAME_UNITS];
     final int y[] = new int[GAME_UNITS];
+    JPanel title_panel = new JPanel();
     int bodyParts = 6;
     int applesEaten;
     int appleX;
@@ -37,6 +38,7 @@ public class GamePanel extends JPanel implements ActionListener {
         this.addKeyListener(new MyKeyAdapter());
         this.requestFocusInWindow(); // allows the panel to listen to key events
         StartGame();
+
     }
 
     public void StartGame() {

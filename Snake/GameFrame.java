@@ -13,6 +13,7 @@ public class GameFrame extends JFrame {
         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
+        
 
         // Pack the frame to ensure proper sizing
         this.pack();
