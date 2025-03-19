@@ -1,65 +1,94 @@
-package Snake;
+/** 
+* SnakeGame.java
+* @author Sinclair DeYoung
+* @purpose The Snake game
+* @since 12-02-2025
+ * @version 1.1
+ */
 
-import Snake.GamePanel.GameMenu;
+package SnakeGame;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.Timer;
 
-public class GamePanel extends JPanel implements ActionListener {
+public class SnakeGame extends JFrame implements ActionListener {
 
+    // Constants for the game
     static final int SCREEN_WIDTH = 600;
     static final int SCREEN_HEIGHT = 600;
     static final int UNIT_SIZE = 25;
-    static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT)/UNIT_SIZE;
+    static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     static final int DELAY = 70; // delay in milliseconds
-    private JFrame frame;
     private GameMenu gameMenu = GameMenu.PLAY;
-    final int x[] = new int[GAME_UNITS];
-    final int y[] = new int[GAME_UNITS];
-    JPanel title_panel = new JPanel();
+
+    // Game variables
+    final int[] x = new int[GAME_UNITS];
+    final int[] y = new int[GAME_UNITS];
     int bodyParts = 6;
     int applesEaten;
     int appleX;
     int appleY;
     char direction = 'R';
     boolean running = false;
-    Timer timer;
-    Random random;
 
-    public GamePanel(JFrame frame){
-        // setting the game panel and starting the game
-        random = new Random();
-        this.frame = frame; // store JFrame reference
-        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        this.setBackground(Color.black);
-        this.setFocusable(true);
-        this.addKeyListener(new MyKeyAdapter());
-        this.requestFocusInWindow(); // allows the panel to listen to key events
-        StartGame();
+    // GUI components
+    javax.swing.Timer timer;
+    Random random = new Random();
+    GamePanel gamePanel = new GamePanel();
+    JPanel scorePanel = new JPanel();
+    JLabel scoreLabel = new JLabel();
 
+    public SnakeGame() {
+        // Set up the game frame
+        setTitle("Snake Game");
+        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null); // Center the frame on the screen
+        setResizable(false);
+
+        // Set up the game panel
+        gamePanel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        gamePanel.setBackground(Color.BLACK);
+        gamePanel.setLayout(null);
+
+        // Set up the score panel
+        scorePanel.setPreferredSize(new Dimension(SCREEN_WIDTH, 50));
+        scorePanel.setBackground(Color.GRAY);
+        scoreLabel.setForeground(Color.WHITE);
+        scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        scorePanel.add(scoreLabel);
+
+        // Add panels to the frame
+        add(gamePanel, BorderLayout.CENTER);
+        add(scorePanel, BorderLayout.NORTH);
+        
+        // start the game
+        startGame(); // start the game
+        
+        setVisible(true);
+        gamePanel.requestFocusInWindow();
     }
 
-    public void StartGame() {
-        // starts the game
+    public void startGame() {
+        // Initialize game variables
+        direction = 'R';
         bodyParts = 6;
         applesEaten = 0;
+        running = true;
         x[0] = 0;
         y[0] = 0;
-        direction = 'R';
+
+        // Place the first apple
         newApple();
-        running = true;
+
+        // Start the timer
         timer = new Timer(DELAY, this);
         timer.start();
     }
 
-    @Override  
-    public void paintComponent(Graphics g){
-        //System.out.println("running = " + running);
-        super.paintComponent(g);
-        draw(g);
-    }
     public void draw(Graphics g){
 
         if (gameMenu == GameMenu.PLAY) {
@@ -70,6 +99,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 //     g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
                 //     g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);
                 // }
+                
                 // draw apple
                 g.setColor(Color.RED);
                 g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
@@ -93,6 +123,7 @@ public class GamePanel extends JPanel implements ActionListener {
             } else {
                 // Timer stop
                 timer.stop();
+                // Game over
                 gameOver(g);
             }
         } else if (gameMenu == GameMenu.PAUSE) {
@@ -112,38 +143,28 @@ public class GamePanel extends JPanel implements ActionListener {
     public void move(){
         if(running) {
             switch (gameMenu) {
-                case PLAY:
-                    for (int i = bodyParts; i > 0; i--){
-                        x[i] = x[i-1];
-                        y[i] = y[i-1];
+                case PLAY -> {
+                    for (int i = bodyParts; i > 0; i--) {
+                        x[i] = x[i - 1];
+                        y[i] = y[i - 1];
                     }
-                    
+                    // direction control through a switch statement
                     switch (direction) {
-                        case 'U':
-                            y[0] = y[0] - UNIT_SIZE;
-                            break;
-                        case 'D':
-                            y[0] = y[0] + UNIT_SIZE;
-                            break;
-                        case 'L':
-                            x[0] = x[0] - UNIT_SIZE;
-                            break;
-                        case 'R':
-                            x[0] = x[0] + UNIT_SIZE;
-                            break;
-                        default:
-                            break;
+                        case 'U' -> y[0] = y[0] - UNIT_SIZE;
+                        case 'D' -> y[0] = y[0] + UNIT_SIZE;
+                        case 'L' -> x[0] = x[0] - UNIT_SIZE;
+                        case 'R' -> x[0] = x[0] + UNIT_SIZE;
+                        default -> {}
                     }
-                    break;
-                case PAUSE:
+                }
+                case PAUSE -> {
                     return;
-                case RESTART:
-                    StartGame();
-                    break;
-                case EXIT:
-                    frame.dispose();
-                default:
-                    throw new AssertionError();
+                }
+                case RESTART -> startGame();
+                case EXIT -> System.exit(0);
+                // Default case
+                // If the user presses any other key, do nothing
+                default -> throw new AssertionError();
             }
         }
 
@@ -265,47 +286,51 @@ public class GamePanel extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e){
             // System.out.println("in key pressed");
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_LEFT:
-                    // System.out.println("in left key case");
-                    if(direction != 'R'){
-                        direction = 'L';
-                    }
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    // System.out.println("in right key case");
-                    if(direction != 'L'){
-                        direction = 'R';
-                    }
-                    break;
-                case KeyEvent.VK_UP:
-                    // System.out.println("in up key case");
-                    if(direction != 'D'){
-                        direction = 'U';
-                    }
-                    break;
-                case KeyEvent.VK_DOWN:
-                    // System.out.println("in down key case");
-                    if(direction != 'U'){
-                        direction = 'D';
-                    }
-                    break;
-                case KeyEvent.VK_P:
-                    // System.out.println("in pause"); 
+                case KeyEvent.VK_LEFT -> {
+                    if(direction != 'R') direction = 'L';
+                }
+                case KeyEvent.VK_RIGHT -> {
+                    if(direction != 'L') direction = 'R';
+                }
+                case KeyEvent.VK_UP -> {
+                    if(direction != 'D') direction = 'U';
+                }
+                case KeyEvent.VK_DOWN -> {
+                    if(direction != 'U') direction = 'D';
+                }
+                case KeyEvent.VK_P -> {
                     gameMenu = (gameMenu == GameMenu.PLAY) ? GameMenu.PAUSE : GameMenu.PLAY;
-                    break;
-                case KeyEvent.VK_R:
-                    // System.out.println("restarted");
+                }
+                case KeyEvent.VK_R -> {
                     StartGame();
-                    break;
-                case KeyEvent.VK_ESCAPE:
-                    // System.out.println("escape");
-                    frame.dispose();
-                    break;
+                }
+                case KeyEvent.VK_ESCAPE -> {
+                    gameMenu = GameMenu.EXIT;
+                }
                 // Default case
                 // If the user presses any other key, do nothing
-                default:
-                    break;
-             }
+                default -> {
+                    // System.out.println("in default case");
+                    // throw new AssertionError();
+                }
         }
     }
+
+    public void StartGame() {
+        // System.out.println("in start game");
+        gameMenu = GameMenu.PLAY;
+        // System.out.println("gameMenu = " + gameMenu);
+        startGame();
+    }
 }
+
+class GamePanel extends JPanel {
+    // Game panel class
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        draw(g);
+    }
+}
+}
+

@@ -9,9 +9,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 // Import for the games
 import TicTacToe.TTTRun;
-import Snake.SnakeGame;
+import SnakeGame.SnakeRun;
 import Solitaire.SolitaireRun;
 import java.util.concurrent.Flow;
 import javax.imageio.IIOException;
@@ -38,6 +39,9 @@ public class GameLauncher {
         frame.setLocationRelativeTo(null); // center the frame on the screen
 
         // Create a main panel with box layout
+        JLabel titleLabel = new JLabel("Game Launcher");
+        JPanel buttonPanel = new JPanel();
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setOpaque(false); // make the panel transparent
@@ -45,16 +49,9 @@ public class GameLauncher {
         // set background image
         try {
             ImageIcon backgroundImage = new ImageIcon("images/BackgroundImage.jpg");
-            frame.setContentPane(new JPanel() {
-                @Override
-                public void paintComponent(Graphics g) {
-                    super.paintComponent(g);
-                    g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
-                }
-            });
-            
+            frame.setContentPane(new BackgroundPanel(backgroundImage));
         } catch (Exception e) {
-            System.out.println("Error backgroud image not found: " + e);
+            System.out.println("Exception error backgroud image not found: " + e.getMessage());
             frame.setContentPane(new JPanel());
         }
 
@@ -63,7 +60,6 @@ public class GameLauncher {
         frame.add(mainPanel, BorderLayout.CENTER);
 
         // create title label
-        JLabel titleLabel = new JLabel("Game Launcher");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // center the label
@@ -71,7 +67,6 @@ public class GameLauncher {
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20))); // add space between title and buttons
 
         // button panel
-        JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
         buttonPanel.setOpaque(false); // make the panel transparent
 
@@ -83,9 +78,9 @@ public class GameLauncher {
         styleButton(tttButton); // add style to buttons
         styleButton(snakeButton); // add style to buttons
         styleButton(solitaireButton); // add style to buttons
-        tttButton.addActionListener(l -> lauchTTT()); // lambda expression
-        snakeButton.addActionListener(l -> lauchSnake()); // lambda expression
-        solitaireButton.addActionListener(l -> lauchSolitaire()); // lambda expression
+        tttButton.addActionListener(l -> launchTTT()); // lambda expression
+        snakeButton.addActionListener(l -> launchSnake()); // lambda expression
+        solitaireButton.addActionListener(l -> launchSolitaire()); // lambda expression
         buttonPanel.add(tttButton);
         buttonPanel.add(snakeButton);
         buttonPanel.add(solitaireButton);
@@ -123,17 +118,17 @@ public class GameLauncher {
         frame.setVisible(true);
     }
 
-    private void lauchTTT() {
+    private void launchTTT() {
         // lanuches tic tac toe
         frame.setVisible(false); // set the launcher to invisible
         SwingUtilities.invokeLater(() -> TTTRun.main(null));  
     }
-    private void lauchSnake() {
+    private void launchSnake() {
         // lanuches Snake Game
         frame.setVisible(false); // set the launcher to invisible
-        SwingUtilities.invokeLater(() -> SnakeGame.main(null));
+        SwingUtilities.invokeLater(() -> SnakeRun.main(null));
     }
-    private void lauchSolitaire() {
+    private void launchSolitaire() {
         // lanuches Snake Game
         frame.setVisible(false); // set the launcher to invisible
         SwingUtilities.invokeLater(() -> SolitaireRun.main(null));
@@ -146,5 +141,23 @@ public class GameLauncher {
                 new GameLauncher();
             }
         });
+    }
+
+    // define a custom JPanel class for the background image
+    class BackgroundPanel extends JPanel {
+        private final ImageIcon backgroundImage;
+
+        public BackgroundPanel(ImageIcon backgroundImage) {
+            this.backgroundImage = backgroundImage;
+            setLayout(new BorderLayout());
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (backgroundImage != null) {
+                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        }
     }
 }
