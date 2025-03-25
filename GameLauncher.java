@@ -24,8 +24,9 @@ public class GameLauncher {
     private JButton tttButton;
     private JButton snakeButton;
     private JButton solitaireButton;
+    static final int numberOfButtons = 3;
     // set the screen size
-    static final int SCREEN_WIDTH = 400;
+    static final int SCREEN_WIDTH = numberOfButtons * 200;
     static final int SCREEN_HEIGHT = 300;
 
     public GameLauncher() {

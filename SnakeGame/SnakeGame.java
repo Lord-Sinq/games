@@ -8,6 +8,7 @@
 
 package SnakeGame;
 
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -41,7 +42,8 @@ public class SnakeGame extends JFrame implements ActionListener {
     JPanel scorePanel = new JPanel();
     JLabel scoreLabel = new JLabel();
 
-    public SnakeGame() {
+    public SnakeGame() {       
+
         // Set up the game frame
         setTitle("Snake Game");
         setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -50,6 +52,8 @@ public class SnakeGame extends JFrame implements ActionListener {
         setResizable(false);
 
         // Set up the game panel
+        gamePanel.addKeyListener(new MyKeyAdapter());
+        gamePanel.setFocusable(true);
         gamePanel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         gamePanel.setBackground(Color.BLACK);
         gamePanel.setLayout(null);
@@ -64,12 +68,25 @@ public class SnakeGame extends JFrame implements ActionListener {
         // Add panels to the frame
         add(gamePanel, BorderLayout.CENTER);
         add(scorePanel, BorderLayout.NORTH);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
         
         // start the game
-        startGame(); // start the game
+        initializeGame(); // initialize the game
         
         setVisible(true);
         gamePanel.requestFocusInWindow();
+    }
+
+    private void initializeGame() {
+        // Initialize the game
+        scoreLabel.setText("Score: 0");
+        startGame();
     }
 
     public void startGame() {
@@ -81,9 +98,13 @@ public class SnakeGame extends JFrame implements ActionListener {
         x[0] = 0;
         y[0] = 0;
 
+        // Stop the timer if it is running
+        if (timer != null) {
+            timer.stop();
+        }
+
         // Place the first apple
         newApple();
-
         // Start the timer
         timer = new Timer(DELAY, this);
         timer.start();
@@ -116,10 +137,10 @@ public class SnakeGame extends JFrame implements ActionListener {
                         g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                     }
                 }
-                g.setColor(new Color(198, 64, 222));
-                g.setFont(new Font("Bauhaus 93", Font.BOLD, 40));
-                FontMetrics metrics = getFontMetrics(g.getFont());
-                g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
+                // g.setColor(new Color(198, 64, 222));
+                // g.setFont(new Font("Bauhaus 93", Font.BOLD, 40));
+                // FontMetrics metrics = getFontMetrics(g.getFont());
+                // g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
             } else {
                 // Timer stop
                 timer.stop();
@@ -157,28 +178,34 @@ public class SnakeGame extends JFrame implements ActionListener {
                         default -> {}
                     }
                 }
-                case PAUSE -> {
-                    return;
-                }
-                case RESTART -> startGame();
+                case PAUSE -> {return; }
+                case RESTART -> initializeGame();
                 case EXIT -> System.exit(0);
                 // Default case
                 // If the user presses any other key, do nothing
                 default -> throw new AssertionError();
             }
         }
-
     }
+
     public void checkApple() {
         if(running) {
             if((x[0] == appleX) && (y[0] == appleY)){
                 bodyParts++;
                 applesEaten++;
+
+                scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                scoreLabel.setForeground(Color.BLACK);
+                StringBuilder sb = new StringBuilder();
+                sb.append("P: pause | R: restart | Esc: exit\n\t\t Score: ").append(applesEaten);
+                scoreLabel.setText(sb.toString());
+                // scoreLabel.setText("P: pause | R: restart | Esc: exit Score: " + applesEaten);
+                
                 newApple();
             }
         }
-
     }
+
     public void checkCollisions() {
         // checks if head collids with body
         if(running) {
@@ -188,35 +215,26 @@ public class SnakeGame extends JFrame implements ActionListener {
                 }
             }
             // checks if head touches left border
-            if(x[0] < 0 ){
-                running = false;
-            }
+            if(x[0] < 0 ){running = false;}
             // checks if head touches right border
-            if(x[0] >= SCREEN_WIDTH ){
-                running = false;
-            }
+            if(x[0] >= SCREEN_WIDTH ){running = false;}
             // checks if head touches top border
-            if(y[0] < 0 ){
-                running = false;
-            }
+            if(y[0] < 0 ){running = false;}
             // checks if head touches bottom border
-            if(y[0] >= SCREEN_HEIGHT ){
-                running = false;
-            }
-
-            if (!running){
-                timer.stop();
-            }
+            if(y[0] >= SCREEN_HEIGHT ){running = false;}
+            // stop timer if game is not running
+            if (!running){timer.stop();}
         }
     }
 
     public void gamePause(Graphics g) {
         // Pasue menu
         // show current score 
-        g.setColor(new Color(198, 64, 222));
-        g.setFont(new Font("Bauhaus 93", Font.BOLD, 40));
-        FontMetrics metrics1 = getFontMetrics(g.getFont());
-        g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics1.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
+        // g.setColor(new Color(198, 64, 222));
+        // g.setFont(new Font("Bauhaus 93", Font.BOLD, 40));
+        // FontMetrics metrics1 = getFontMetrics(g.getFont());
+        // g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics1.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
+       
         // pause menu text
         g.setColor(new Color(198, 64, 222));
         g.setFont(new Font("Bauhaus 93", Font.BOLD, 75));
@@ -233,7 +251,7 @@ public class SnakeGame extends JFrame implements ActionListener {
         g.setColor(new Color(198, 64, 222));
         g.setFont(new Font("Bauhaus 93", Font.BOLD, 35));
         FontMetrics metrics4 = getFontMetrics(g.getFont());
-        g.drawString("Press Escape to Exit", (SCREEN_WIDTH - metrics4.stringWidth("Press Escape to Exit"))/2, SCREEN_HEIGHT/2 + 75);
+        g.drawString("Press Escape to Go Back", (SCREEN_WIDTH - metrics4.stringWidth("Press Escape to Go Back"))/2, SCREEN_HEIGHT/2 + 75);
 
 
     }
@@ -241,11 +259,11 @@ public class SnakeGame extends JFrame implements ActionListener {
 
 
     public void gameOver(Graphics g) {
-        // Score text
-        g.setColor(new Color(198, 64, 222));
-        g.setFont(new Font("Bauhaus 93", Font.BOLD, 40));
-        FontMetrics metrics1 = getFontMetrics(g.getFont());
-        g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics1.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
+        // // Score text
+        // g.setColor(new Color(198, 64, 222));
+        // g.setFont(new Font("Bauhaus 93", Font.BOLD, 40));
+        // FontMetrics metrics1 = getFontMetrics(g.getFont());
+        // g.drawString("Score: "+ applesEaten, (SCREEN_WIDTH - metrics1.stringWidth("Score: "+ applesEaten))/2, g.getFont().getSize());
 
         // Game over text
         g.setColor(new Color(198, 64, 222));
@@ -263,10 +281,9 @@ public class SnakeGame extends JFrame implements ActionListener {
         g.setColor(new Color(198, 64, 222));
         g.setFont(new Font("Bauhaus 93", Font.BOLD, 35));
         FontMetrics metrics4 = getFontMetrics(g.getFont());
-        g.drawString("Press Escape to Exit", (SCREEN_WIDTH - metrics4.stringWidth("Press Escape to Exit"))/2, SCREEN_HEIGHT/2 + 75);
+        g.drawString("Press Escape to Go Back", (SCREEN_WIDTH - metrics4.stringWidth("Press Escape to Go Back"))/2, SCREEN_HEIGHT/2 + 75);
 
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -275,8 +292,17 @@ public class SnakeGame extends JFrame implements ActionListener {
             move();
             checkApple();
             checkCollisions();
+            // System.out.println("in action performed running");
         }
+        StringBuilder sb = new StringBuilder();
+        sb.append("P: pause | R: restart | Esc: exit\n\t\t Score: ").append(applesEaten);
+        scoreLabel.setText(sb.toString());
+
+        scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        scoreLabel.setForeground(Color.BLACK);
+        // scoreLabel.setText("P: pause | R: restart | Esc: exit Score: " + applesEaten);
         repaint();
+        // System.out.println("in action performed");
 
     }
 
@@ -302,25 +328,31 @@ public class SnakeGame extends JFrame implements ActionListener {
                     gameMenu = (gameMenu == GameMenu.PLAY) ? GameMenu.PAUSE : GameMenu.PLAY;
                 }
                 case KeyEvent.VK_R -> {
-                    StartGame();
+                    initializeGame();
                 }
                 case KeyEvent.VK_ESCAPE -> {
-                    gameMenu = GameMenu.EXIT;
+                    exitGame();
                 }
                 // Default case
                 // If the user presses any other key, do nothing
                 default -> {
-                    // System.out.println("in default case");
-                    // throw new AssertionError();
+                    System.out.println("in default case");
+                    throw new AssertionError();
                 }
         }
+    }
+
+    private void exitGame() {
+        // System.out.println("in exit game");
+        dispose();
+        System.exit(0);
     }
 
     public void StartGame() {
         // System.out.println("in start game");
         gameMenu = GameMenu.PLAY;
         // System.out.println("gameMenu = " + gameMenu);
-        startGame();
+        initializeGame();
     }
 }
 
@@ -332,5 +364,7 @@ class GamePanel extends JPanel {
         draw(g);
     }
 }
+
 }
+
 
