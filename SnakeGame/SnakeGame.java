@@ -197,10 +197,10 @@ public class SnakeGame extends JFrame implements ActionListener {
                 scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 scoreLabel.setForeground(Color.BLACK);
                 StringBuilder sb = new StringBuilder();
-                sb.append("P: pause | R: restart | Esc: exit\n\t\t Score: ").append(applesEaten);
+                sb.append("P: pause | R: restart | Esc: exit Score: ").append(applesEaten);
                 scoreLabel.setText(sb.toString());
                 // scoreLabel.setText("P: pause | R: restart | Esc: exit Score: " + applesEaten);
-                
+
                 newApple();
             }
         }
@@ -295,7 +295,7 @@ public class SnakeGame extends JFrame implements ActionListener {
             // System.out.println("in action performed running");
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("P: pause | R: restart | Esc: exit\n\t\t Score: ").append(applesEaten);
+        sb.append("P: pause | R: restart | Esc: exit Score: ").append(applesEaten);
         scoreLabel.setText(sb.toString());
 
         scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
