@@ -9,13 +9,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Flow;
+import javax.imageio.IIOException;
 
 // Import for the games
 import TicTacToe.TTTRun;
 import SnakeGame.SnakeRun;
 import Solitaire.SolitaireRun;
-import java.util.concurrent.Flow;
-import javax.imageio.IIOException;
+/* import RPS.RPSRun; */ // Removed because RPSRun class not found
 
 public class GameLauncher {
 
@@ -24,6 +25,7 @@ public class GameLauncher {
     private JButton tttButton;
     private JButton snakeButton;
     private JButton solitaireButton;
+    // private JButton RPSButton; // Removed because RPSRun class not found
     static final int numberOfButtons = 3;
     // set the screen size
     static final int SCREEN_WIDTH = numberOfButtons * 200;
@@ -75,13 +77,16 @@ public class GameLauncher {
         tttButton = new JButton("Tic Tac Toe");
         snakeButton = new JButton("Snake Game");
         solitaireButton = new JButton("Solitaire");
+        // RPSButton = new JButton("Rock Paper Sissors"); // Removed because RPSRun class not found
         // set button size
         styleButton(tttButton); // add style to buttons
         styleButton(snakeButton); // add style to buttons
         styleButton(solitaireButton); // add style to buttons
+        // styleButton(RPSButton); // add style to buttons
         tttButton.addActionListener(l -> launchTTT()); // lambda expression
         snakeButton.addActionListener(l -> launchSnake()); // lambda expression
         solitaireButton.addActionListener(l -> launchSolitaire()); // lambda expression
+        // RPSButton.addActionListener(l -> launchRPS()); // lambda expression
         buttonPanel.add(tttButton);
         buttonPanel.add(snakeButton);
         buttonPanel.add(solitaireButton);
@@ -134,6 +139,11 @@ public class GameLauncher {
         frame.setVisible(false); // set the launcher to invisible
         SwingUtilities.invokeLater(() -> SolitaireRun.main(null));
     }
+    // private void launchRPS() {
+    //     // launches RPS Game
+    //     frame.setVisible(false); // set the launcher to invisible
+    //     SwingUtilities.invokeLater(() -> RPSRun.main(null));
+    // }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
